@@ -1,6 +1,5 @@
 # Matillion pipeline
 
-## MatillionData Vault Project
 
 ### Description
 
