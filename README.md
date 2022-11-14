@@ -13,7 +13,7 @@
 - [DV2.0 Data Engineering Guild Drive folder](https://drive.google.com/drive/u/0/folders/1r6Lr2JZDA2TKr5j3ojbS9M3253b5BdOH)
   - Drive folder that stores non-code reusable assets as pdf guides, decks, etc.
 
-- Matillion DV2.0 pipeline *_(link to this resource will be added later)_*
+- [Matillion DV2.0 pipeline](https://github.com/Hakkoda1/data_vault_accelarator/tree/main/Matillion%20Pipeline)
   - Project that automates the creation of Hubs, Links and Satellites.
 
 
@@ -22,6 +22,7 @@
 *  ...
 *  ...
 
+
 ### Executing program
 
 * ...
@@ -29,6 +30,7 @@
 ```
 code blocks for commands
 ```
+
 
 ## Help
 
@@ -45,6 +47,7 @@ For further assistance, feel free to contact *_(add product owner contact)_*
 - Patrick Buell - patrick@hakkoda.io
 - Robert Sandberg - rob_sandberg@hakkoda.io
 - Tim Blake - tim_blake@hakkoda.io
+
 
 ## Version History
 
