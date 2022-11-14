@@ -6,6 +6,11 @@
 - Pipeline that automates the creation of Hubs, Links and Satellites.
 
 
+### Resources
+
+- [Hakkoda’s Matillion instance.](http://matillion-sandbox-linux-vm-01.canadacentral.cloudapp.azure.com/)
+
+
 ### Dependencies
 
 -  ...
