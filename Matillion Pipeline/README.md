@@ -11,9 +11,11 @@
 -  ...
 -  ...
 
+
 ### Importing the project 
 
 - In order to import the project into your instance follow [this Matillion article](https://documentation.matillion.com/docs/2734441).
+
 
 ### Excecuting the project 
 
@@ -23,6 +25,7 @@
 ```
 code blocks for commands
 ```
+
 
 ## Help
 
