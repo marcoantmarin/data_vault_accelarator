@@ -44,13 +44,20 @@ This component calls the target table, can be a Hub or Satellite.
 There are two components for calculation, first one creates the hashing and the other one adds constant values such as record source and most importantly the collision key. 
 3. SQL component
 This component calls the source table from Vistustream.
-1. Join
+4. Join
 Left outer join to join both table
-1. Filter
+5. Filter
 Filter component to check for null hash keys
-1. Table output/append
+6. Table output/append
 append new records. 
 
+### Raw Vault
+
+At this stage is where all the creation of components such as Hubs and Satellites takes place. It consists of an orchestration job with several Transformation jobs inside that take the driver created in the raw stage and selecting only what is relevant for each component. 
+
+#### Link table
+
+This component contains an iterator on top that checks the hubs below the link and takes care of taking new inserts in the hash key and adds them to the keyring. 
 
 - ...
 - ...
