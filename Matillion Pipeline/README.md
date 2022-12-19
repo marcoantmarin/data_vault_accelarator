@@ -85,9 +85,47 @@ See [Model Layers](#model-layers) for more information.
 
 - Read [Building a Data Vault](https://documentation.matillion.com/docs/building-a-data-vault) for an example and more details around building a Data Vault. Note: this article explains Data Vault 1.0, although the logical model is similar, it is highly recommended to take consider the updates the 2.0 version brings. 
 
-- ...
-- ...
+- The following are the DAG stages that we tend to utilize:
+  <details>
 
+
+  <summary>Common</summary>
+
+    | dag_stage | Typically found in | description                                                        |
+    |-----------|--------------------|--------------------------------------------------------------------|
+    | stg_     | /models/stg             | <li> Indicates a data set created from dbt-external-tables macros. |
+    | raw_      | /models/raw    | <li> Indicates a data set that is being sourced into dbt. </li><li> This layer is typically virtual and it represents a 1:1 relationship between the source from the Snowflake staging database and first layer of models. </li> |                                                                                                           |
+    | int_      | /models/refined      | <li> Indicates a logical step towards creating a final data set. </li><li>Typically used for:</li><ul><li>Breaking up models that will feed fct_ or dim_ models into smaller pieces to reduce complexity</li><li>Creating a reusable data set to reference in multiple downstream fct_ and dim_ models</li></ul> |
+    | base_     | /models/refined    | <li> Indicates cleaning, flattening and standardization on a data set before joining to other data sets in `int_`  models. </li> |  
+    | dim_      | /models/curated      | <li> Flags data which is used to describe an entity. </li><li> Indicates a final data which is robust, versatile, and ready for consumption. </li> |
+    | fct_      | /models/curated      | <li> Flags data which is in the form of numeric facts observed during measurement events. </li><li> Indicates a final data which is robust, versatile, and ready for consumption. </li> |
+  
+  </details>
+
+### Model File Naming and Coding
+
+- All objects should be plural.  
+  Example: `HUB_CENTER` vs. `SAT_CENTER`
+
+- Schema, table and column names should be in `snake_case` (i.e. an underscore separating words).
+
+- Limit use of abbreviations that are related to domain knowledge. An analyst will understand `medical_record_number` better than `mrn`.
+
+- Use names based on the _business_ terminology, rather than the source terminology.
+
+- Each model should have a primary key that can identify the unique row, and should be named `<object>_id`, e.g. `account_id` – this makes it easier to know what `id` is being referenced in downstream joined models.
+
+- If a surrogate (hash) key is created, it should be named `HK_NAME_ID`.
+
+- Avoid using reserved words (such as [these](https://docs.snowflake.com/en/sql-reference/reserved-keywords.html) for Snowflake) as column names.
+
+- Consistency is key! Use the same field names across models where possible.  
+Example: a key to the `customers` table should be named `customer_id` rather than `user_id`.
+
+
+
+- ...
+- ...
 ```
 code blocks for commands
 ```
