@@ -22,42 +22,68 @@
 - In order to import the project into your instance follow [this Matillion article](https://documentation.matillion.com/docs/2734441).
 
 
-### Excecuting the project 
+# Excecuting the project 
+## Data Engineering Lifecycle
+The following steps are document the lifecycle of a data engineering pipeline on our project from environment setup, ingesting data into Snowflake, transforming it and finally serving it up for analytics and other downstream uses. 
 
-# Static pipeline
+### 1. Discovery 
 
-## Main Orchestration job 
+Review existing pipelines and ingestion model using Matillion and Fivetran.
 
-+ This piece is part of the static model created for Data Vault 2.0, it consists of a main orchestration job and the two stages designed for Data Vault 2.0
-+ consisting of the Raw Stage and the Raw Vault, plus the Information Mart component. 
-  
-### Raw Stage
+### 2. Design Target Data Model
 
-+ The Raw Stage is made up of 3 transformation jobs for each component, it aims to create a table with new inserts containing both descriptive data and the Data Vault columns such as Hashing keys. 
+Define the target data model to be developed in Matillion ETL. Use the naming conventions in the appendix for the Curated [Model Layers](#model-layers). Prototype views should be written for each target table for use in unit testing to check row counts and column values (See [Unit Testing](#unit-testing) in the appendix):
 
-#### Components recipe
+### 3. Design Data Pipelines
 
-For the creation of most of the components in Matillion, the following were used:
-1. Table input
-This component calls the target table, can be a Hub or Satellite. 
-2. Calculation component
-There are two components for calculation, first one creates the hashing and the other one adds constant values such as record source and most importantly the collision key. 
-3. SQL component
-This component calls the source table from Vistustream.
-4. Join
-Left outer join to join both table
-5. Filter
-Filter component to check for null hash keys
-6. Table output/append
-append new records. 
+The design of the Matillion ETL Data Pipelines are documented in the appendix below. This includes Components, pipeline flow recipe and testing. See [Model Organization](#model-organization) for more information.
 
-### Raw Vault
+### 4. Build Data Pipelines
 
-At this stage is where all the creation of components such as Hubs and Satellites takes place. It consists of an orchestration job with several Transformation jobs inside that take the driver created in the raw stage and selecting only what is relevant for each component. 
+The following steps should be followed for each step of the development process for building a Matillion ETL based data pipeline and following the [Branching Strategy](#branching-strategy) outlined in the appendix:
 
-#### Link table
+#### a. Ingest Data
 
-This component contains an iterator on top that checks the hubs below the link and takes care of taking new inserts in the hash key and adds them to the keyring. 
+Using a Database Query component to pull the data into our Matillion ETL environment through and JDBC connection. 
+
+#### b. Build Raw Matillion model(s)
+
+Raw data models will be created for each source table/file. use the naming convention below in the [Model Layers](#model-layers) section of the appendix. Raw models should include testing for source freshness and descriptions for the purpose of each table. 
+
+#### c. Build Refined Matillion model(s)
+
+Refined data models will be created to cleanse, standardize and integrate data from Raw Data Models. Use the naming convention below in the [Model Layers](#model-layers) section of the appendix. Refined models should include testing for uniqueness, not null fields and descriptions for the pupose of each model and calculated field. 
+
+#### d. Build Curated Matillion model(s)
+
+Curated data models will be created to prepare data for consumption by analysts and other downstream uses. Use the naming convention below in the [Model Layers](#model-layers) section of the appendix. Curated models should include testing for uniqueness, referential integrity (where applicable), not null fields and descriptions for the purpose of each model and column. 
+
+#### e. Build Matillion job(s)
+
+Matillion Orchestration Jobs will be created to orchestrate Data Warehouse Transformation Jobs, the job(s) will be composed of a series of Matillion ETL components (i.e `SQL Query`, `Calculator`) to load, test and perform maintenance operations. 
+
+#### 5. Deploy Data Pipelines
+
++ Not sure what to add here just yet. 
+
+## Appendix
+
+### Model organization
+
+| Category | Description                                             |
+|----------|---------------------------------------------------------|
+| Stage    | Contains models which source data into Matillion ETL    |
+|          | from VIRTUSTREAM.                                       |
+| Raw      | Contains models which source data from Matillion staging|
+|          | area for use downstream in Matillion raw staging area   |
+| Information Mart  | Contains models which combine, transform and prepare data for downstream analytics|
+
+Things to note:
+- There are different types of models, here we develop a Data Vault 2.0 Data Warehouse Model. 
+that typically exist in each of the above categories.  
+See [Model Layers](#model-layers) for more information. 
+
+- Read [Building a Data Vault](https://documentation.matillion.com/docs/building-a-data-vault) for an example and more details around building a Data Vault. Note: this article explains Data Vault 1.0, although the logical model is similar, it is highly recommended to take consider the updates the 2.0 version brings. 
 
 - ...
 - ...
