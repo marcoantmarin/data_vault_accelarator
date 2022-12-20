@@ -72,10 +72,8 @@ Matillion Orchestration Jobs will be created to orchestrate Data Warehouse Trans
 
 | Category | Description                                             |
 |----------|---------------------------------------------------------|
-| Stage    | Contains models which source data into Matillion ETL    |
-|          | from VIRTUSTREAM.                                       |
-| Raw      | Contains models which source data from Matillion staging|
-|          | area for use downstream in Matillion raw staging area   |
+| Stage    | Contains models which source data into Matillion ETL from VIRTUSTREAM.|
+| Raw      | Contains models which source data from Matillion staging area for use downstream in Matillion raw staging area|
 | Information Mart  | Contains models which combine, transform and prepare data for downstream analytics|
 
 Things to note:
@@ -120,10 +118,75 @@ See [Model Layers](#model-layers) for more information.
 - Avoid using reserved words (such as [these](https://docs.snowflake.com/en/sql-reference/reserved-keywords.html) for Snowflake) as column names.
 
 - Consistency is key! Use the same field names across models where possible.  
-Example: a key to the `customers` table should be named `customer_id` rather than `user_id`.
+Example: a key to the `participant` table should be named `participant_id` rather than `user_id`.
+
+Model configurations at the folder level should be considered (and if applicable, applied) fist. For this case, defining a project within the Matillion ETL instance, which is called DataPlatform_VirtuStreamClarity. Once we set this project, within the default folder there will be three folders and one *_orchestration job_* these are defined as follow:
 
 
+| Stage    | Description                                             |
+|----------|---------------------------------------------------------|
+| RAW_STAGE| Folder containing raw objects that come from source     |
+| RAW_VAULT| Folder contining standardize objects like hubs and satellites|
+| Information Mart| Folder containing objects ready for downstream analytics|
+| BUILD_DATA_VAULT|Orchestration job containing all preview objects ready to be run in parallel|
 
+### Unit testing 
+
+At a minimum, developers need to perform the following unit tests before creating their Pull Request. Screenshots of the successful unit tests should be included as part of your pull request in the [Validation of models](https://github.com/Hakkoda1/dbt_capstone_solution/blob/main/pull_request_template.md#validation-of-models) section.
+
+  1. [Compare Row Counts](https://github.com/dbt-labs/dbt-audit-helper/tree/0.6.0/#compare_relations-source) 
+  This test will ensure that all rows have arrived in the target when compared to the source. Add a screenshot of the unit test preview from the Snowflake in your pull request similar to the table below:
+
+      | Business Key | Hash Key | Record Source | Load_datetime |
+      |----|----|----|----|
+      | Query produced no results |
+
+using the following query:
+
+```sql
+SELECT *
+FROM HUB_NAME hub
+LEFT OUTER JOIN SAT_NAME sat
+ON hub.HK_NAME_ID = sat.HK_NAME_ID
+WHERE sat.HK_NAME_ID IS NULL; 
+```
+
++ Not sure if we will add this:
+  2. [Compare Column data types](https://github.com/dbt-labs/dbt-audit-helper/tree/0.6.0/#compare_all_columns-source)
+  This test will ensure that all data types & ordinal positions align between the source and target.  Add a screenshot of the unit test preview from the dbt Cloud UI in your pull request similar to the table below:
+
+      | column_name	| a_ordinal_position	| b_ordinal_position	| a_data_type |	b_data_type |
+      |-----------|-----------|-----------|-----------|-----------|
+      |patient_skey	| 1	| 1	| binary	| binary |
+      |patient_id	| 2	| 2	| varchar	| varchar |
+      |birth_date	| 3	| 3	| timestamp	| date | 
+
+## Branching Strategy
+Our pull requests (typically) fit into four main categories:
+
+| Category | Description                                             |
+|----------|---------------------------------------------------------|
+| Dev      |           |
+| Prod     |           |
+| Test     |           |
+| feature  |    |
+
+The following diagram highlights the branching strategy defined for the project:
+
+![image](https://drive.google.com/uc?export=view&id=1F5iwwkFwbJ1fO1LwOnlUn69_C9FS2VRk)
+
+### Deployment Workflow 
+1. Developer creates a branch from Dev and names it feature, fix or test and makes their changes or additions.
+2. Developer unit tests their changes or additions against a clone of PROD (or QA)
+3. A PR is created by the developer from their feature/fix/test branch to QA branch
+4. PR is automatically labeled feature, fix or test based on the naming convention of “feature/logical-feature-name” by GitHub PR Labeler action.
+5. PR is reviewed and merged into QA branch by an admin
+6. QA job is run and QA/UAT is performed on the change/addition 
+7. Once ready for production, an admin uses Github  action ‘Draft a new release’ to trigger creation of a release branch PR to the PROD branch.
+8. After the release branch PR is merged a second Github action triggers creation of  a git Release and generates release notes.
+
+### Pull Request Template
+[This pull request template]([pull_request_template.md](https://github.com/Hakkoda1/dbt_capstone_solution/blob/main/pull_request_template.md#validation-of-models)), located in the root of our repository, has been created to standardize pull requests across the project team. For reference, review [Git Integration with Matillion ETL](https://documentation.matillion.com/docs/en/2974180) describes the architecture of Matillion ETL's Git integration feature and documents actions including commit, create branch, merge, push, fetch, and more. 
 - ...
 - ...
 ```
