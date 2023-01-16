@@ -119,6 +119,7 @@ See [Model Layers](#model-layers) for more information.
 - Consistency is key! Use the same field names across models where possible.  
 Example: a key to the `participant` table should be named `participant_id` rather than `user_id`.
 
+### Model Layers
 Model configurations at the folder level should be considered (and if applicable, applied) fist. For this case, defining a project within the Matillion ETL instance, which is called DataPlatform_VirtuStreamClarity. Once we set this project, within the default folder there will be three folders and one *_orchestration job_* these are defined as follow:
 
 
