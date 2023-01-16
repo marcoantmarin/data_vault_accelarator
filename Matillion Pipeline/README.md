@@ -100,7 +100,6 @@ See [Model Layers](#model-layers) for more information.
   
   </details>
 
-### Model File Naming and Coding
 
 - All objects should be plural.  
   Example: `HUB_CENTER` vs. `SAT_CENTER`

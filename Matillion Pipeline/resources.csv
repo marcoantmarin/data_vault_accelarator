@@ -1,0 +1,6 @@
+NAME,LINK
+Building-a-Data-Vault,https://documentation.matillion.com/docs/building-a-data-vault
+these,https://docs.snowflake.com/en/sql-reference/reserved-keywords.html
+Compare-row-counts,https://github.com/dbt-labs/dbt-audit-helper/tree/0.6.0/#compare_relations-source
+Compare-column-data-types,https://github.com/dbt-labs/dbt-audit-helper/tree/0.6.0/#compare_all_columns-source
+Git-integration-with-Matillion-ETL,https://documentation.matillion.com/docs/en/2974180
